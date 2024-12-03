@@ -4,7 +4,7 @@ import os
 import re
 
 def solve_part1(long_string: str) -> int:
-    pattern = r"mul\((\d+),(\d+)\)"
+    pattern = r"mul\((\d{1,3}),(\d{1,3})\)"
     matches = re.findall(pattern, long_string)
 
     result = []
