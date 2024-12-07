@@ -120,7 +120,7 @@ func solvePart1(lookupTable map[int]map[int]bool, allUpdates [][]int) P1Wrapper 
 
 }
 
-func customSort(numList []int, lookupTable map[int]map[int]bool) {
+func sort2(numList []int, lookupTable map[int]map[int]bool) {
 	slices.SortFunc(numList, func(num1, num2 int) int {
 		futureNums := lookupTable[num1]
 		if _, exists := futureNums[num2]; !exists {
@@ -138,7 +138,7 @@ func solvePart2(lookupTable map[int]map[int]bool, allInvalidUpdates [][]int) int
 	total := 0
 	for _, invalidUpdates := range allInvalidUpdates {
 
-		customSort(invalidUpdates, lookupTable)
+		sort2(invalidUpdates, lookupTable)
 
 		midPointIdx := len(invalidUpdates) / 2
 		midPointValue := invalidUpdates[midPointIdx]
