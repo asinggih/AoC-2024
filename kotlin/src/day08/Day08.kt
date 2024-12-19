@@ -1,6 +1,5 @@
 package day08
 
-import println
 import readInput
 import kotlin.math.abs
 
@@ -89,13 +88,64 @@ private fun getAntiNodeLoc(
 
     return null
 
-
 }
 
 
 
-fun part2() : Int {
-    return 1
+fun part2(matrix: List<String>) : Int {
+
+    val antiNodes = mutableSetOf<Pair<Int,Int>>()
+
+    val lookupTable = mutableMapOf<Char, MutableList<Pair<Int,Int>>>()
+
+    val antennaeLoc = mutableSetOf<Pair<Int,Int>>()
+
+    val rowMax = matrix[0].length
+    val colMax = matrix.size
+
+    matrix.forEachIndexed { row, rows ->
+        rows.forEachIndexed { col, _ ->
+            val node = matrix[row][col]
+            if (node != '.') {
+                val listOfPairs = lookupTable.getOrPut(node) {
+                    mutableListOf()
+                }
+                val nodeLoc = Pair(row, col)
+                listOfPairs.add(nodeLoc)
+                antennaeLoc.add(nodeLoc)
+            }
+        }
+    }
+
+    for ((_, listOfPairs) in lookupTable) {
+        val uniquePairs = getAllPairs(listOfPairs)
+
+        uniquePairs.forEach { nodes ->
+            var firstNodeA = nodes.first
+            var secondNodeA = nodes.second
+            while (true) {
+                getAntiNodeLoc(firstNodeA, secondNodeA, rowMax, colMax)?.let {
+                    antiNodes.add(it)
+                    secondNodeA = firstNodeA
+                    firstNodeA = it
+                } ?: break
+            }
+
+
+            var firstNodeB = nodes.second
+            var secondNodeB = nodes.first
+            while (true) {
+                getAntiNodeLoc(firstNodeB, secondNodeB, rowMax, colMax)?.let {
+                    antiNodes.add(it)
+                    secondNodeB = firstNodeB
+                    firstNodeB = it
+                } ?: break
+            }
+
+        }
+
+    }
+    return (antiNodes + antennaeLoc).size
 }
 
 fun main() {
@@ -107,6 +157,15 @@ fun main() {
     println(part1(input))
     check(part1(input).also { println("Part 1 input : ${it}") } == 320)
     println()
+
+    check(part2(testInput).also { println("Part 2 sample input : ${it}") } == 34)
+    println(part1(input))
+    check(part2(input).also { println("Part 2 input : ${it}") } == 1157)
+    println()
+
+
+    println(part2(testInput))
+    println(part2(input))
 
 
 }
